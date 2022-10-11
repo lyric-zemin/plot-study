@@ -1,0 +1,11 @@
+{
+  "name": "vue-cli-plugin-plop",
+  "version": "0.0.1",
+  "description": "vue-cli 统一代码文件规范插件",
+  "main": "index.js",
+  "dependencies": {
+    "inquirer": "7.3.3",
+    "inquirer-directory": "2.2.0",
+    "plop": "2.7.4"
+  }
+}
