@@ -9,7 +9,7 @@ import * as fs from 'fs'
 
 inquirer.registerPrompt('directory', require('inquirer-directory'))
 
-const baseGeneratorPath = path.join(__dirname, '../../src')
+const baseGeneratorPath = path.join(process.cwd(), './src')
 const pathExists = (path: string) => fs.existsSync(path)
 const properCase = (str: string) => str.slice(0, 1).toUpperCase() + str.slice(1)
 
