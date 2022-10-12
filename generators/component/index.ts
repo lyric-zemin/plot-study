@@ -2,57 +2,49 @@
  * Component Generator
  */
 
-import { ActionType } from 'plop'
-import * as inquirer from 'inquirer'
-import * as path from 'path'
-import * as fs from 'fs'
-
-inquirer.registerPrompt('directory', require('inquirer-directory'))
-
-const baseGeneratorPath = path.join(process.cwd(), './src')
-const pathExists = (path: string) => fs.existsSync(path)
-const properCase = (str: string) => str.slice(0, 1).toUpperCase() + str.slice(1)
+import { PlopGeneratorConfig, ActionType } from 'node-plop'
+import { pathExists, properCase, baseGeneratorPath } from '../util'
 
 export enum ComponentProptNames {
   componentName = 'componentName',
   path = 'path',
-  preprocessorCss = 'preprocessorCss'
+  cssPreprocessor = 'cssPreprocessor'
 }
 
 type Answers = { [P in ComponentProptNames]: string }
 
-export const componentGenerator = {
-  description: 'Add a component',
+export const componentGenerator: PlopGeneratorConfig = {
+  description: '新增一个组件',
   prompts: [
     {
       type: 'input',
       name: ComponentProptNames.componentName,
-      message: 'What should it be called?'
+      message: '组件名?'
     },
     {
       type: 'directory',
       name: ComponentProptNames.path,
-      message: 'Where do you want it to be created?',
+      message: '组件位置?',
+      // @ts-ignore
       basePath: `${baseGeneratorPath}`
     },
     {
       type: 'list',
-      name: ComponentProptNames.preprocessorCss,
-      default: 'scss',
-      message: '选择css预处理器',
-      choices: ['scss', 'sass', 'less']
+      name: ComponentProptNames.cssPreprocessor,
+      default: 'css',
+      message: 'css预处理器?',
+      choices: ['css', 'scss', 'sass', 'less', 'stylus']
     }
   ],
   actions: data => {
     const answers = data as Answers
-
-    const componentPath = `${baseGeneratorPath}/${answers.path}/${properCase(
-      answers.componentName
-    )}.vue`
+    const fullComponentName = `${properCase(answers.componentName)}.vue`
+    const componentPath = `${baseGeneratorPath}/${answers.path}/${fullComponentName}`
 
     if (pathExists(componentPath)) {
-      throw new Error(`Component '${answers.componentName}' already exists`)
+      throw new Error(`组件 '${fullComponentName}' 已存在`)
     }
+
     const actions: ActionType[] = [
       {
         type: 'add',
